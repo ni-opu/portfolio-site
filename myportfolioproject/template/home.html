@@ -1,0 +1,271 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% if message %}
+<section class="page-section" id="contact">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="section-heading text-uppercase">Contact Us</h1>
+            <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+        </div>
+        <div class="text-center">
+            <h2 align="center" class="section-heading text-uppercase">Thanks for your message.</h2><br><br>
+            <a href="{% url 'home' %}"><button class="btn btn-primary btn-xl text-uppercase" type="submit">Reload</button></a>
+        </div>
+    </div>
+</section>
+{% else %}
+<!-- Masthead-->
+<header class="masthead">
+    <div class="container">
+        <div class="masthead-subheading">Welcome To Our World!</div>
+        <div class="masthead-heading text-uppercase">It's Nice To See You Here</div>
+        <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#services">Tell Me More</a>
+    </div>
+</header>
+<!-- Services-->
+<section class="page-section" id="services">
+    <div class="container">
+        <div class="text-center">
+            <h2 class="section-heading text-uppercase">Services</h2>
+            <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+        </div>
+        <div class="row text-center">
+            {% for s in service %}
+            <div class="col-md-4">
+                <span class="fa-stack fa-4x">
+                    <i class="fas fa-circle fa-stack-2x text-primary"></i>
+                    <i class="{{ s.fa_icon_calss }}"></i>
+                </span>
+                <h4 class="my-3">{{ s.service_name }}</h4>
+                <p class="text-muted">
+                    {{ s.service_details|truncatechars:80 }}
+                    <!--copied from portfolio section-->
+                    <a class="portfolio-link" data-toggle="modal" href="#{{s.modal_id}}">details...</a>
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+<!-- Service Modals-->
+{% for a in service %}
+<div class="portfolio-modal modal fade" id="{{a.modal_id}}" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal"><img src="{% static 'assets/img/close-icon.svg' %}" alt="Close modal" /></div>
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="modal-body">
+                            <!-- service Details Go Here-->
+                            <span class="fa-stack fa-4x">
+                                <i class="fas fa-circle fa-stack-2x text-primary"></i>
+                                <i class="{{ a.fa_icon_calss }}"></i>
+                            </span>
+                            <h2 class="text-uppercase"> {{ a.service_name }} </h2>
+                            <p> {{ a.service_details }} </p>
+                            <button class="btn btn-primary" data-dismiss="modal" type="button">
+                                <i class="fas fa-times mr-1"></i>
+                                Close Project
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+<!-- Portfolio Grid-->
+<section class="page-section bg-light" id="portfolio">
+    <div class="container">
+        <div class="text-center">
+            <h2 class="section-heading text-uppercase">Portfolio</h2>
+            <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+        </div>
+        <div class="row">
+            {% for i in portfolio %}
+            <div class="col-lg-4 col-sm-6 mb-4">
+                <div class="portfolio-item">
+                    <a class="portfolio-link" data-toggle="modal" href="#{{i.modal_id}}">
+                        <div class="portfolio-hover">
+                            <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
+                        </div>
+                        <img class="img-fluid" src="{{i.thumbnail_image.url}}" alt="" />
+                    </a>
+                    <div class="portfolio-caption">
+                        <div class="portfolio-caption-heading"> {{ i.project_name }} </div>
+                        <div class="portfolio-caption-subheading text-muted"> {{ i.category }} </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+<!-- Portfolio Modals-->
+{% for p in portfolio %}
+<div class="portfolio-modal modal fade" id="{{p.modal_id}}" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal"><img src="{% static 'assets/img/close-icon.svg' %}" alt="Close modal" /></div>
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="modal-body">
+                            <!-- Project Details Go Here-->
+                            <h2 class="text-uppercase"> {{ p.project_name }} </h2>
+                            <p class="item-intro text-muted"> {{ p.short_description }} </p>
+                            <img class="img-fluid d-block mx-auto" src="{{p.full_image.url}}" alt="" />
+                            <p> {{ p.description }} </p>
+                            <ul class="list-inline">
+                                <li>Date: {{ p.date|date:"F, Y" }}</li>
+                                <li>Client: {{ p.client }}</li>
+                                <li>Category: {{ p.category }}</li>
+                            </ul>
+                            <button class="btn btn-primary" data-dismiss="modal" type="button">
+                                <i class="fas fa-times mr-1"></i>
+                                Close Project
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+<!-- About-->
+<section class="page-section" id="about">
+    <div class="container">
+        <div class="text-center">
+            <h2 class="section-heading text-uppercase">About</h2>
+            <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+        </div>
+        <ul class="timeline">
+            {% for a in about %}
+            {% if forloop.counter|divisibleby:2 %}
+            <li class="timeline-inverted">
+                <div class="timeline-image"><img class="rounded-circle img-fluid" src="{{a.event_image.url}}" alt="" /></div>
+                <div class="timeline-panel">
+                    <div class="timeline-heading">
+                        {% if a.eventDate %}
+                        <h4> {{ a.eventDate|date:"F Y" }} </h4>
+                        {% else %}
+                        <h4> {{ a.startDate|date:"Y" }} - {{ a.endDate|date:"Y" }} </h4>
+                        {% endif %}
+                        <h4 class="subheading"> {{ a.event_title }} </h4>
+                    </div>
+                    <div class="timeline-body"><p class="text-muted"> {{ a.event_details }} </p></div>
+                </div>
+            </li>
+            {% else %}
+            <li>
+                <div class="timeline-image"><img class="rounded-circle img-fluid" src="{{a.event_image.url}}" alt="" /></div>
+                <div class="timeline-panel">
+                    <div class="timeline-heading">
+                        {% if a.eventDate %}
+                        <h4> {{ a.eventDate|date:"F Y" }} </h4>
+                        {% else %}
+                        <h4> {{ a.startDate|date:"Y" }} - {{ a.endDate|date:"Y" }} </h4>
+                        {% endif %}
+                        <h4 class="subheading"> {{ a.event_title }} </h4>
+                    </div>
+                    <div class="timeline-body"><p class="text-muted"> {{ a.event_details }} </p></div>
+                </div>
+            </li>
+            {% endif %}
+            {% endfor %}
+            <li class="timeline-inverted">
+                <div class="timeline-image">
+                    <h4>
+                        Be Part
+                        <br />
+                        Of Our
+                        <br />
+                        Story!
+                    </h4>
+                </div>
+            </li>
+        </ul>
+    </div>
+</section>
+<!-- Team-->
+<section class="page-section bg-light" id="team">
+    <div class="container">
+        <div class="text-center">
+            <h2 class="section-heading text-uppercase">Our Amazing Team</h2>
+            <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+        </div>
+        <div class="row">
+            {% for t in team %}
+            <div class="col-lg-4">
+                <div class="team-member">
+                    <img class="mx-auto rounded-circle" src="{{ t.photo.url }}" alt="" />
+                    <h4> {{ t.name }} </h4>
+                    <p class="text-muted"> {{ t.role }} </p>
+                    <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-twitter"></i></a>
+                    <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-facebook-f"></i></a>
+                    <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center"><p class="large text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut eaque, laboriosam veritatis, quos non quis ad perspiciatis, totam corporis ea, alias ut unde.</p></div>
+        </div>
+    </div>
+</section>
+<!-- Clients-->
+<div class="py-5">
+    <div class="container">
+        <div class="row">
+            {% for c in client %}
+            <div class="col-md-3 col-sm-6 my-3">
+                <a href="#!"><img class="img-fluid d-block mx-auto" src="{{ c.client_logo.url }}" alt="" /></a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<!-- Contact-->
+<section class="page-section" id="contact">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="section-heading text-uppercase">Contact Us</h1>
+            <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+        </div>
+        <form method="post" id="contactForm" name="sentMessage" novalidate="novalidate">
+            {% csrf_token %}
+            <div class="row align-items-stretch mb-5">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <input class="form-control" name="name" id="name" type="text" placeholder="Your Name *" required="required"/>
+                        <p class="help-block text-danger"></p>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" name="email" id="email" type="email" placeholder="Your Email *" required="required"/>
+                        <p class="help-block text-danger"></p>
+                    </div>
+                    <div class="form-group mb-md-0">
+                        <input class="form-control" name="phone" id="phone" type="tel" placeholder="Your Phone *" required="required"/>
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group form-group-textarea mb-md-0">
+                        <textarea class="form-control" name="message" id="message" placeholder="Your Message *" required="required"></textarea>
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center">
+                <div id="success"></div>
+                <button class="btn btn-primary btn-xl text-uppercase" type="submit">Send Message</button>
+            </div>
+        </form>
+    </div>
+</section>
+{% endif %}
+{% endblock %}
